@@ -216,7 +216,7 @@ bindsym $alt+space exec rofi -show drun
 
 title_align center
 
-for_window [class=".*"] border pixel 2
+for_window [class=".*"] border pixel 3
 
 # Dracula color palette
 set $dracula_bg      #282a36
@@ -232,7 +232,7 @@ set $dracula_red     #ff5555
 set $dracula_yel     #f1fa8c
 
 # screenshot
-bindsym Print exec maim --select | xclip -selection clipboard
+bindsym Print exec maim --select | xclip -selection clipboard -t image/png
 
 # class                 border        backgr.       text          indicator    child_border
 client.focused          $dracula_pur  $dracula_pur  $dracula_bg   $dracula_pur $dracula_pur
