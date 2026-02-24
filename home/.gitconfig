@@ -9,3 +9,5 @@
 	helper = !/usr/bin/gh auth git-credential
 [init]
 	defaultBranch = main
+[alias]
+  merged-branch-d = !git pull origin main && git branch --merged | grep -E -v 'main' | xargs git branch -d

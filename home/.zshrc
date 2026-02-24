@@ -71,9 +71,10 @@ ZSH_THEME=""
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
+  # git
   zsh-autosuggestions
   zsh-syntax-highlighting
+  zsh-abbr
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -121,3 +122,11 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# git
+abbr ga='git add'
+abbr gcm='git commit -m'
+abbr gps='git push'
+abbr gsw='git switch'
+abbr gswc='git switch -c'
+abbr gwt='git worktree'
