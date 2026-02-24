@@ -1,0 +1,25 @@
+# Logs and caches
+*.log
+*.cache
+.cache/
+
+# Nvim swap/backup/undo files
+config/nvim/.swp
+config/nvim/**/*.swp
+config/nvim/**/*.swo
+config/nvim/**/*.swn
+config/nvim/swap/
+config/nvim/backup/
+config/nvim/undo/
+config/nvim/sessions/
+config/nvim/shada/
+
+# Compiled / generated files
+*.pyc
+__pycache__/
+*.o
+*.so
+
+# OS noise
+.DS_Store
+Thumbs.db
