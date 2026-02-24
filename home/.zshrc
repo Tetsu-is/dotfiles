@@ -108,6 +108,7 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # starship
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
 eval "$(starship init zsh)"
 
 export PATH="$HOME/.local/bin:$PATH"
