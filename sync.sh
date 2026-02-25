@@ -109,7 +109,7 @@ cmd_status() {
             result=$(diff -rq "$repo" "$live" 2>&1 || true)
             if [[ -n "$result" ]]; then
                 echo "  [differs] ~/.config/$name"
-                echo "$result" | sed 's/^/    /'
+                diff --color=always -ru "$repo" "$live" 2>&1 | sed 's/^/    /' || true
                 ((diffs++)) || true
             else
                 echo "  [ok] ~/.config/$name"
@@ -129,6 +129,7 @@ cmd_status() {
             result=$(diff -q "$repo" "$live" 2>&1 || true)
             if [[ -n "$result" ]]; then
                 echo "  [differs] ~/$file"
+                diff --color=always -u "$repo" "$live" 2>&1 | sed 's/^/    /' || true
                 ((diffs++)) || true
             else
                 echo "  [ok] ~/$file"
