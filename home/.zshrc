@@ -123,10 +123,3 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# git
-abbr ga='git add'
-abbr gcm='git commit -m'
-abbr gps='git push'
-abbr gsw='git switch'
-abbr gswc='git switch -c'
-abbr gwt='git worktree'
