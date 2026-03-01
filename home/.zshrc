@@ -123,3 +123,4 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+alias sudo=sudo-rs
