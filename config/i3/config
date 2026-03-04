@@ -218,26 +218,8 @@ title_align center
 
 for_window [class=".*"] border pixel 3
 
-# Dracula color palette
-set $dracula_bg      #282a36
-set $dracula_cur     #44475a
-set $dracula_fg      #f8f8f2
-set $dracula_cmt     #6272a4
-set $dracula_cya     #8be9fd
-set $dracula_grn     #50fa7b
-set $dracula_ora     #ffb86c
-set $dracula_pnk     #ff79c6
-set $dracula_pur     #bd93f9
-set $dracula_red     #ff5555
-set $dracula_yel     #f1fa8c
+# colorctl theme colors (managed by colorctl)
+include ~/.config/colorctl/i3.conf
 
 # screenshot
 bindsym Print exec maim --select | xclip -selection clipboard -t image/png
-
-# class                 border        backgr.       text          indicator    child_border
-client.focused          $dracula_pur  $dracula_pur  $dracula_bg   $dracula_pur $dracula_pur
-client.focused_inactive $dracula_cur  $dracula_cur  $dracula_fg   $dracula_cmt $dracula_cur
-client.unfocused        $dracula_bg   $dracula_bg   $dracula_fg  $dracula_bg  $dracula_bg
-client.urgent           $dracula_red  $dracula_red  $dracula_bg   $dracula_red $dracula_red
-client.placeholder      $dracula_bg   $dracula_bg   $dracula_fg   $dracula_bg  $dracula_bg
-client.background       $dracula_bg
