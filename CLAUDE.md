@@ -17,7 +17,7 @@ dotfiles/
 For every task, use a git worktree to isolate changes:
 
 ```sh
-# Create a worktree for the task
+# Create a worktree in the PARENT directory (never inside the repo)
 git worktree add ../dotfiles-<task-name> -b <task-name>
 
 # Work inside the worktree
@@ -28,6 +28,13 @@ git worktree remove ../dotfiles-<task-name>
 ```
 
 Use the `EnterWorktree` tool when available to set up the worktree automatically.
+
+### Worktree rules
+- Always create worktrees in the **parent directory** (`../dotfiles-<task-name>`)
+- Naming: `dotfiles-{branch-name}`
+- Never create worktrees inside `.claude/`, `.git/`, or any subdirectory of the repo
+- Add `.worktrees/` and `.claude/` to `.gitignore` to avoid accidentally committing them
+- Remove the worktree after merging
 
 ## Workflows
 
