@@ -48,22 +48,28 @@ _xob_notify() {
 
   # Restart xob only if not running or focused monitor changed
   if ! pgrep -x xob >/dev/null || ! grep -q "offset = ${xob_x};" /tmp/xob_current.cfg 2>/dev/null; then
+    # Load colors from colorctl current theme
+    theme_file="${HOME}/.config/colorctl/themes/$(cat "${HOME}/.config/colorctl/current" 2>/dev/null)"
+    if [ -f "$theme_file" ]; then
+      # shellcheck source=/dev/null
+      source "$theme_file"
+    fi
+    bg="${CC_THEME_BACKGROUND:-#000000}ee"
+    fg_normal="${CC_THEME_PRIMARY:-#ffffff}"
+    fg_alt="${CC_THEME_COMMENT:-#888888}"
+    fg_overflow="${CC_THEME_ORANGE:-#ff9f0a}"
+    fg_altoverflow="${CC_THEME_ALERT:-#ff5555}"
+
     cat > /tmp/xob_current.cfg <<EOF
 default = {
-    x           = {relative = 0.0; offset = ${xob_x};};
-    y           = {relative = 0.0; offset = ${xob_y};};
-    length      = {relative = 0.0; offset = 200;};
-    thickness   = 8;
-    outline     = 0;
-    border      = 12;
-    padding     = 2;
-    orientation = "horizontal";
-    overflow    = "proportional";
+    x = {relative = 0.0; offset = ${xob_x};};
+    y = {relative = 0.0; offset = ${xob_y};};
+    @include "${HOME}/.config/xob/styles.cfg"
     color = {
-        normal     = { fg = "#ffffff"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
-        alt        = { fg = "#6c6c70"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
-        overflow   = { fg = "#ff9f0a"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
-        altoverflow = { fg = "#ff453a"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
+        normal      = { fg = "${fg_normal}"; bg = "${bg}"; border = "${bg}"; };
+        alt         = { fg = "${fg_alt}";    bg = "${bg}"; border = "${bg}"; };
+        overflow    = { fg = "${fg_overflow}";    bg = "${bg}"; border = "${bg}"; };
+        altoverflow = { fg = "${fg_altoverflow}"; bg = "${bg}"; border = "${bg}"; };
     };
 };
 EOF
