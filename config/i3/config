@@ -216,7 +216,8 @@ bindsym $mod+Shift+b exec zen
 bindsym $mod+Shift+Escape exec betterlockscreen -l
 
 # rofi -show run
-bindsym $alt+space exec rofi -show drun
+# bindsym $alt+space exec rofi -show drun
+bindsym $alt+space exec ~/.config/rofi/launchers/type-2/launcher.sh
 
 title_align center
 
