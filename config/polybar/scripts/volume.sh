@@ -75,9 +75,21 @@ EOF
   echo "$vol" > /tmp/xobpipe
 }
 
+_polybar_notify() {
+  [ -p /tmp/volpipe ] || return
+  out=$(wpctl get-volume "$sink" 2>/dev/null)
+  if echo "$out" | grep -q "MUTED"; then
+    echo "MUTED" > /tmp/volpipe
+  else
+    vol=$(echo "$out" | awk '{printf "%d", $2 * 100}')
+    echo "${vol}%" > /tmp/volpipe
+  fi
+}
+
 case "$1" in
 mute)
   wpctl set-mute "$sink" toggle
+  _polybar_notify
   _xob_notify
   ;;
 "")
@@ -91,6 +103,7 @@ mute)
   ;;
 *)
   wpctl set-volume "$sink" "$1"
+  _polybar_notify
   _xob_notify
   ;;
 esac
