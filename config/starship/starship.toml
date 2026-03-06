@@ -4,9 +4,9 @@ palette = "colorctl"
 format = """
 [░▒▓](#a3aed2)\
 [  ](bg:#a3aed2 fg:#090c0c)\
-[](bg:purple fg:#a3aed2)\
+[](bg:primary fg:#a3aed2)\
 $directory\
-[](fg:purple bg:#394260)\
+[](fg:primary bg:#394260)\
 $git_branch\
 $git_status\
 [](fg:#394260 bg:#212736)\
@@ -21,20 +21,17 @@ $time\
 \n$character"""
 
 [palettes.colorctl]
-background = "#282a36"
-current = "#44475a"
-foreground = "#f8f8f2"
-comment = "#6272a4"
-cyan = "#8be9fd"
-green = "#50fa7b"
-orange = "#ffb86c"
-pink = "#ff79c6"
-purple = "#bd93f9"
-red = "#ff5555"
-yellow = "#f1fa8c"
+background = "#0c0c0c"
+current = "#1f1f1f"
+foreground = "#cccccc"
+comment = "#555555"
+primary = "#dddddd"
+cyan = "#6e9da8"
+green = "#6e9e6e"
+orange = "#a08050"
 
 [directory]
-style = "fg:foreground bg:purple"
+style = "fg:background bg:primary"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -48,11 +45,11 @@ truncation_symbol = "…/"
 [git_branch]
 symbol = ""
 style = "bg:#394260"
-format = '[[ $symbol $branch ](fg:purple bg:#394260)]($style)'
+format = '[[ $symbol $branch ](fg:primary bg:#394260)]($style)'
 
 [git_status]
 style = "bg:#394260"
-format = '[[($all_status$ahead_behind )](fg:purple bg:#394260)]($style)'
+format = '[[($all_status$ahead_behind )](fg:primary bg:#394260)]($style)'
 
 [nodejs]
 symbol = ""

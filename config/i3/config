@@ -199,7 +199,7 @@ bindsym $mod+r mode "resize"
 # run polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 # set background image
-exec_always --no-startup-id feh --bg-fill ~/Downloads/arch-dracula.png
+exec_always --no-startup-id feh --bg-fill ~/Downloads/pacman.png
 
 exec --no-startup-id fcitx5 -d
 
