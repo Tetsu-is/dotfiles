@@ -36,9 +36,9 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 
 # Use volume.sh to adjust volume of the currently active audio sink.
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/polybar/scripts/volume.sh 5%+ && pkill -SIGUSR1 polybar
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/polybar/scripts/volume.sh 5%- && pkill -SIGUSR1 polybar
-bindsym XF86AudioMute exec --no-startup-id ~/.config/polybar/scripts/volume.sh mute && pkill -SIGUSR1 polybar
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/polybar/scripts/volume.sh 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/polybar/scripts/volume.sh 5%-
+bindsym XF86AudioMute exec --no-startup-id ~/.config/polybar/scripts/volume.sh mute
 bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
 # Use brightnessctl to adust display brightness
@@ -204,8 +204,7 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/arch-dracula.png
 exec --no-startup-id fcitx5 -d
 
 # xob volume OSD: create FIFO and start xob daemon
-exec --no-startup-id [ -p /tmp/xobpipe ] || mkfifo /tmp/xobpipe
-exec --no-startup-id sh -c "tail -f /tmp/xobpipe | xob"
+exec_always --no-startup-id sh -c "mkfifo /tmp/xobpipe 2>/dev/null; pgrep xob || tail -f /tmp/xobpipe | xob"
 
 exec_always --no-startup-id picom -b
 
