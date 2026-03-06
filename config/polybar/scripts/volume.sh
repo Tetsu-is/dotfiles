@@ -44,7 +44,11 @@ _xob_notify() {
   xob_x=$((mx + mw / 2 - 112))
   xob_y=$((my + mh / 2 - 18))
 
-  cat > /tmp/xob_current.cfg <<EOF
+  mkfifo /tmp/xobpipe 2>/dev/null
+
+  # Restart xob only if not running or focused monitor changed
+  if ! pgrep -x xob >/dev/null || ! grep -q "offset = ${xob_x};" /tmp/xob_current.cfg 2>/dev/null; then
+    cat > /tmp/xob_current.cfg <<EOF
 default = {
     x           = {relative = 0.0; offset = ${xob_x};};
     y           = {relative = 0.0; offset = ${xob_y};};
@@ -63,11 +67,10 @@ default = {
     };
 };
 EOF
-
-  mkfifo /tmp/xobpipe 2>/dev/null
-  pkill xob 2>/dev/null
-  sleep 0.05
-  nohup bash -c 'tail -f /tmp/xobpipe | xob -c /tmp/xob_current.cfg' >/dev/null 2>&1 &
+    pkill xob 2>/dev/null
+    sleep 0.05
+    nohup bash -c 'tail -f /tmp/xobpipe | xob -c /tmp/xob_current.cfg' >/dev/null 2>&1 &
+  fi
 
   echo "$vol" > /tmp/xobpipe
 }
