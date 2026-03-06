@@ -30,13 +30,46 @@ fi
 sink="${sink_id:-@DEFAULT_AUDIO_SINK@}"
 
 _xob_notify() {
-  [ -p /tmp/xobpipe ] || return
   out=$(wpctl get-volume "$sink" 2>/dev/null)
   if echo "$out" | grep -q "MUTED"; then
-    echo 0 > /tmp/xobpipe
+    vol=0
   else
-    echo "$out" | awk '{v = int($2 * 100); print (v > 100 ? 100 : v)}' > /tmp/xobpipe
+    vol=$(echo "$out" | awk '{v = int($2 * 100); print (v > 100 ? 100 : v)}')
   fi
+
+  # Bar dimensions: length=200, border=12, padding=2, thickness=8
+  # total_w=224 half=112; total_h=36 half=18
+  read -r mx my mw mh < <(i3-msg -t get_workspaces 2>/dev/null \
+    | jq -r '.[] | select(.focused) | "\(.rect.x) \(.rect.y) \(.rect.width) \(.rect.height)"')
+  xob_x=$((mx + mw / 2 - 112))
+  xob_y=$((my + mh / 2 - 18))
+
+  cat > /tmp/xob_current.cfg <<EOF
+default = {
+    x           = {relative = 0.0; offset = ${xob_x};};
+    y           = {relative = 0.0; offset = ${xob_y};};
+    length      = {relative = 0.0; offset = 200;};
+    thickness   = 8;
+    outline     = 0;
+    border      = 12;
+    padding     = 2;
+    orientation = "horizontal";
+    overflow    = "proportional";
+    color = {
+        normal     = { fg = "#ffffff"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
+        alt        = { fg = "#6c6c70"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
+        overflow   = { fg = "#ff9f0a"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
+        altoverflow = { fg = "#ff453a"; bg = "#1c1c1eee"; border = "#1c1c1eee"; };
+    };
+};
+EOF
+
+  mkfifo /tmp/xobpipe 2>/dev/null
+  pkill xob 2>/dev/null
+  sleep 0.05
+  nohup bash -c 'tail -f /tmp/xobpipe | xob -c /tmp/xob_current.cfg' >/dev/null 2>&1 &
+
+  echo "$vol" > /tmp/xobpipe
 }
 
 case "$1" in

@@ -203,8 +203,9 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/arch-dracula.png
 
 exec --no-startup-id fcitx5 -d
 
-# xob volume OSD: create FIFO and start xob daemon
-exec_always --no-startup-id sh -c "mkfifo /tmp/xobpipe 2>/dev/null; pgrep xob || tail -f /tmp/xobpipe | xob"
+
+# xob volume OSD: create FIFO (xob is started/restarted by volume.sh per monitor)
+exec_always --no-startup-id mkfifo /tmp/xobpipe 2>/dev/null
 
 exec_always --no-startup-id picom -b
 
