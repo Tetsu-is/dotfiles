@@ -29,9 +29,20 @@ fi
 
 sink="${sink_id:-@DEFAULT_AUDIO_SINK@}"
 
+_xob_notify() {
+  [ -p /tmp/xobpipe ] || return
+  out=$(wpctl get-volume "$sink" 2>/dev/null)
+  if echo "$out" | grep -q "MUTED"; then
+    echo 0 > /tmp/xobpipe
+  else
+    echo "$out" | awk '{v = int($2 * 100); print (v > 100 ? 100 : v)}' > /tmp/xobpipe
+  fi
+}
+
 case "$1" in
 mute)
   wpctl set-mute "$sink" toggle
+  _xob_notify
   ;;
 "")
   out=$(wpctl get-volume "$sink" 2>/dev/null)
@@ -44,5 +55,6 @@ mute)
   ;;
 *)
   wpctl set-volume "$sink" "$1"
+  _xob_notify
   ;;
 esac

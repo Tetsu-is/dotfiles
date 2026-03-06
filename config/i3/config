@@ -203,6 +203,10 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/arch-dracula.png
 
 exec --no-startup-id fcitx5 -d
 
+# xob volume OSD: create FIFO and start xob daemon
+exec --no-startup-id [ -p /tmp/xobpipe ] || mkfifo /tmp/xobpipe
+exec --no-startup-id sh -c "tail -f /tmp/xobpipe | xob"
+
 exec_always --no-startup-id picom -b
 
 ## keybinds to open specific applications
