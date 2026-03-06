@@ -227,3 +227,4 @@ include ~/.config/colorctl/i3.conf
 
 # screenshot
 bindsym Print exec maim --select | xclip -selection clipboard -t image/png
+
