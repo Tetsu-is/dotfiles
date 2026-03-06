@@ -39,10 +39,10 @@ _xob_notify() {
 
   # Bar dimensions: length=200, border=12, padding=2, thickness=8
   # total_w=224 half=112; total_h=36 half=18
-  read -r mx my mw mh < <(i3-msg -t get_workspaces 2>/dev/null \
-    | jq -r '.[] | select(.focused) | "\(.rect.x) \(.rect.y) \(.rect.width) \(.rect.height)"')
+  read -r mx my mw mh < <(i3-msg -t get_workspaces 2>/dev/null |
+    jq -r '.[] | select(.focused) | "\(.rect.x) \(.rect.y) \(.rect.width) \(.rect.height)"')
   xob_x=$((mx + mw / 2 - 112))
-  xob_y=$((my + mh / 2 - 18))
+  xob_y=$((my + 15))
 
   mkfifo /tmp/xobpipe 2>/dev/null
 
@@ -54,19 +54,19 @@ _xob_notify() {
       # shellcheck source=/dev/null
       source "$theme_file"
     fi
-    bg="${CC_THEME_BACKGROUND:-#000000}ee"
+    bg="${CC_THEME_BACKGROUND:-#000000}"
     fg_normal="${CC_THEME_PRIMARY:-#ffffff}"
     fg_alt="${CC_THEME_COMMENT:-#888888}"
     fg_overflow="${CC_THEME_ORANGE:-#ff9f0a}"
     fg_altoverflow="${CC_THEME_ALERT:-#ff5555}"
 
-    cat > /tmp/xob_current.cfg <<EOF
+    cat >/tmp/xob_current.cfg <<EOF
 default = {
     x = {relative = 0.0; offset = ${xob_x};};
     y = {relative = 0.0; offset = ${xob_y};};
     @include "${HOME}/.config/xob/styles.cfg"
     color = {
-        normal      = { fg = "${fg_normal}"; bg = "${bg}"; border = "${bg}"; };
+        normal      = { fg = "${fg_normal}"; bg = "${bg}"; border = "${fg_normal}"; };
         alt         = { fg = "${fg_alt}";    bg = "${bg}"; border = "${bg}"; };
         overflow    = { fg = "${fg_overflow}";    bg = "${bg}"; border = "${bg}"; };
         altoverflow = { fg = "${fg_altoverflow}"; bg = "${bg}"; border = "${bg}"; };
@@ -78,17 +78,17 @@ EOF
     nohup bash -c 'tail -f /tmp/xobpipe | xob -c /tmp/xob_current.cfg' >/dev/null 2>&1 &
   fi
 
-  echo "$vol" > /tmp/xobpipe
+  echo "$vol" >/tmp/xobpipe
 }
 
 _polybar_notify() {
   [ -p /tmp/volpipe ] || return
   out=$(wpctl get-volume "$sink" 2>/dev/null)
   if echo "$out" | grep -q "MUTED"; then
-    echo "MUTED" > /tmp/volpipe
+    echo "MUTED" >/tmp/volpipe
   else
     vol=$(echo "$out" | awk '{printf "%d", $2 * 100}')
-    echo "${vol}%" > /tmp/volpipe
+    echo "${vol}%" >/tmp/volpipe
   fi
 }
 
