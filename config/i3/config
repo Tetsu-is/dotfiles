@@ -231,5 +231,5 @@ for_window [class=".*"] border pixel 3
 include ~/.config/colorctl/i3.conf
 
 # screenshot
-bindsym Print exec maim --select | xclip -selection clipboard -t image/png
+bindsym Print exec --no-startup-id sh -c "maim --select | xclip -selection clipboard -t image/png"
 
