@@ -207,6 +207,8 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/pacman.png
 
 exec --no-startup-id fcitx5 -d
 
+# key assignment
+exec --no-startup-id setxkbmap -option ctrl:nocaps
 
 # xob volume OSD: create FIFO (xob is started/restarted by volume.sh per monitor)
 exec_always --no-startup-id mkfifo /tmp/xobpipe 2>/dev/null
@@ -232,4 +234,5 @@ include ~/.config/colorctl/i3.conf
 
 # screenshot
 bindsym Print exec --no-startup-id sh -c "maim --select | xclip -selection clipboard -t image/png"
+bindsym $mod+Shift+p exec --no-startup-id sh -c "maim --select | xclip -selection clipboard -t image/png"
 
