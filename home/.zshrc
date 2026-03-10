@@ -125,6 +125,7 @@ esac
 
 alias sudo=sudo-rs
 alias ls=eza
+alias cl=claude
 
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
