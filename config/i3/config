@@ -208,7 +208,7 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/pacman.png
 exec --no-startup-id fcitx5 -d
 
 # key assignment
-exec --no-startup-id setxkbmap -option ctrl:nocaps
+exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
 # xob volume OSD: create FIFO (xob is started/restarted by volume.sh per monitor)
 exec_always --no-startup-id mkfifo /tmp/xobpipe 2>/dev/null
