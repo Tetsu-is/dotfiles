@@ -203,7 +203,7 @@ bindsym $mod+r mode "resize"
 # run polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 # set background image
-exec_always --no-startup-id feh --bg-fill ~/Downloads/pacman.png
+exec_always --no-startup-id feh --bg-fill ~/Downloads/arch-dracula.png
 
 exec --no-startup-id fcitx5 -d
 
@@ -236,3 +236,5 @@ include ~/.config/colorctl/i3.conf
 bindsym Print exec --no-startup-id sh -c "maim --select | xclip -selection clipboard -t image/png"
 bindsym $mod+Shift+p exec --no-startup-id sh -c "maim --select | xclip -selection clipboard -t image/png"
 
+gaps inner 2
+gaps outer 2
