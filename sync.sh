@@ -5,12 +5,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MANIFEST="$SCRIPT_DIR/manifest.conf"
 CONFIG_DIR="$SCRIPT_DIR/config"
 HOME_DIR="$SCRIPT_DIR/home"
+MAC_CONFIG_DIR="$SCRIPT_DIR/mac/config"
+MAC_HOME_DIR="$SCRIPT_DIR/mac/home"
+
+OS="$(uname -s)"
+
+assert_linux() {
+    if [[ "$OS" != "Linux" ]]; then
+        echo "Error: '$1' is for Linux only. On macOS, use 'mac-apply' or 'mac-collect'." >&2
+        exit 1
+    fi
+}
 
 # Parse manifest and populate arrays
 parse_manifest() {
     local section=""
     CONFIG_ENTRIES=()
     HOME_ENTRIES=()
+    MAC_CONFIG_ENTRIES=()
+    MAC_HOME_ENTRIES=()
 
     while IFS= read -r line; do
         # Strip comments and blank lines
@@ -22,15 +35,24 @@ parse_manifest() {
             section="config"
         elif [[ "$line" == "[home]" ]]; then
             section="home"
+        elif [[ "$line" == "[mac-config]" ]]; then
+            section="mac-config"
+        elif [[ "$line" == "[mac-home]" ]]; then
+            section="mac-home"
         elif [[ "$section" == "config" ]]; then
             CONFIG_ENTRIES+=("$line")
         elif [[ "$section" == "home" ]]; then
             HOME_ENTRIES+=("$line")
+        elif [[ "$section" == "mac-config" ]]; then
+            MAC_CONFIG_ENTRIES+=("$line")
+        elif [[ "$section" == "mac-home" ]]; then
+            MAC_HOME_ENTRIES+=("$line")
         fi
     done < "$MANIFEST"
 }
 
 cmd_collect() {
+    assert_linux "collect"
     parse_manifest
     mkdir -p "$CONFIG_DIR" "$HOME_DIR"
 
@@ -63,6 +85,7 @@ cmd_collect() {
 }
 
 cmd_apply() {
+    assert_linux "apply"
     parse_manifest
 
     echo "==> Applying config/ entries..."
@@ -94,6 +117,7 @@ cmd_apply() {
 }
 
 cmd_status() {
+    assert_linux "status"
     parse_manifest
     local diffs=0
 
@@ -147,6 +171,7 @@ cmd_status() {
 }
 
 cmd_push() {
+    assert_linux "push"
     cmd_collect
 
     cd "$SCRIPT_DIR"
@@ -160,22 +185,99 @@ cmd_push() {
     fi
 }
 
+cmd_mac_collect() {
+    if [[ "$OS" != "Darwin" ]]; then
+        echo "Error: 'mac-collect' is for macOS only." >&2
+        exit 1
+    fi
+    parse_manifest
+    mkdir -p "$MAC_CONFIG_DIR" "$MAC_HOME_DIR"
+
+    echo "==> Collecting mac/config/ entries..."
+    for name in "${MAC_CONFIG_ENTRIES[@]+"${MAC_CONFIG_ENTRIES[@]}"}"; do
+        src="$HOME/.config/$name"
+        dst="$MAC_CONFIG_DIR/$name"
+        if [[ -d "$src" ]]; then
+            rm -rf "$dst"
+            cp -a "$src" "$dst"
+            echo "  collected: ~/.config/$name"
+        else
+            echo "  skipped (not found): ~/.config/$name"
+        fi
+    done
+
+    echo "==> Collecting mac/home/ entries..."
+    for file in "${MAC_HOME_ENTRIES[@]+"${MAC_HOME_ENTRIES[@]}"}"; do
+        src="$HOME/$file"
+        dst="$MAC_HOME_DIR/$file"
+        if [[ -f "$src" ]]; then
+            cp -a "$src" "$dst"
+            echo "  collected: ~/$file"
+        else
+            echo "  skipped (not found): ~/$file"
+        fi
+    done
+
+    echo "Done."
+}
+
+cmd_mac_apply() {
+    if [[ "$OS" != "Darwin" ]]; then
+        echo "Error: 'mac-apply' is for macOS only." >&2
+        exit 1
+    fi
+    parse_manifest
+
+    echo "==> Applying mac/config/ entries..."
+    for name in "${MAC_CONFIG_ENTRIES[@]+"${MAC_CONFIG_ENTRIES[@]}"}"; do
+        src="$MAC_CONFIG_DIR/$name"
+        dst="$HOME/.config/$name"
+        if [[ -d "$src" ]]; then
+            rm -rf "$dst"
+            cp -a "$src" "$dst"
+            echo "  applied: ~/.config/$name"
+        else
+            echo "  skipped (not in repo): $name"
+        fi
+    done
+
+    echo "==> Applying mac/home/ entries..."
+    for file in "${MAC_HOME_ENTRIES[@]+"${MAC_HOME_ENTRIES[@]}"}"; do
+        src="$MAC_HOME_DIR/$file"
+        dst="$HOME/$file"
+        if [[ -f "$src" ]]; then
+            cp "$src" "$dst"
+            echo "  applied: ~/$file"
+        else
+            echo "  skipped (not in repo): $file"
+        fi
+    done
+
+    echo "Done."
+}
+
 usage() {
     cat <<EOF
 Usage: sync.sh <command>
 
-Commands:
-  collect   Copy live config files into the repo
-  apply     Copy repo files out to system locations
-  status    Show diff between repo and live files
-  push      collect + git commit + git push
+Linux commands:
+  collect      Copy live config files into the repo  (Linux only)
+  apply        Copy repo files out to system          (Linux only)
+  status       Diff repo vs live files                (Linux only)
+  push         collect + git commit + git push        (Linux only)
+
+macOS commands:
+  mac-collect  Copy live config files into mac/       (macOS only)
+  mac-apply    Copy mac/ files out to system          (macOS only)
 EOF
 }
 
 case "${1:-}" in
-    collect) cmd_collect ;;
-    apply)   cmd_apply ;;
-    status)  cmd_status ;;
-    push)    cmd_push ;;
-    *)       usage; exit 1 ;;
+    collect)     cmd_collect ;;
+    apply)       cmd_apply ;;
+    status)      cmd_status ;;
+    push)        cmd_push ;;
+    mac-collect) cmd_mac_collect ;;
+    mac-apply)   cmd_mac_apply ;;
+    *)           usage; exit 1 ;;
 esac
