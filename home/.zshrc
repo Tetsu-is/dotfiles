@@ -123,6 +123,9 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# go -> 
+# <- go
+
 alias sudo=sudo-rs
 alias ls=eza
 alias cl=claude

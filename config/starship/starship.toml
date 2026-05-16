@@ -21,14 +21,14 @@ $time\
 \n$character"""
 
 [palettes.colorctl]
-background = "#0a0a0a"
-current = "#1a1a1a"
-foreground = "#e0e0e0"
-comment = "#3d7a3d"
-primary = "#44d62c"
-cyan = "#00e5ff"
-green = "#44d62c"
-orange = "#ff8c00"
+background = "#0C1014"
+current = "#1A2333"
+foreground = "#D4E8F0"
+comment = "#4F6B7C"
+primary = "#00ADD8"
+cyan = "#00A29C"
+green = "#4ECA8B"
+orange = "#F0A347"
 
 [directory]
 style = "fg:background bg:primary"
