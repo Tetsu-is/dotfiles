@@ -1,4 +1,4 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:4300
-SETUVAR fish_user_paths:/Users/tetsuro\x2eishimoto\x2e01/\x2elocal/bin\x1e/Users/tetsuro\x2eishimoto\x2e01/\x2evolta/bin\x1e/usr/local/go/bin\x1e/Users/tetsuro\x2eishimoto\x2e01/go/bin\x1e/opt/homebrew/bin\x1e/opt/homebrew/sbin
+SETUVAR fish_user_paths:/Users/tetsuro/\x2elocal/bin\x1e/Users/tetsuro/go/bin\x1e/Users/tetsuro\x2eishimoto\x2e01/\x2elocal/bin\x1e/Users/tetsuro\x2eishimoto\x2e01/\x2evolta/bin\x1e/usr/local/go/bin\x1e/Users/tetsuro\x2eishimoto\x2e01/go/bin\x1e/opt/homebrew/bin\x1e/opt/homebrew/sbin

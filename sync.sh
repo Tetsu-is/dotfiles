@@ -330,11 +330,12 @@ cmd_mac_apply() {
     echo "Done."
 }
 
-# rollback [list|<label>] [<timestamp>]
+# rollback [list|<label>] [<timestamp>|<N>]
 # Without args: restore latest backup across all labels
-# list: show available backups
+# list: show available backups with index numbers (1 = newest)
 # <label>: restore latest backup for that label
-# <label> <timestamp>: restore specific snapshot
+# <label> <N>: restore Nth newest snapshot for that label (1 = latest)
+# <label> <timestamp>: restore specific snapshot by timestamp
 cmd_rollback() {
     local subcmd="${1:-latest}"
     shift || true
@@ -344,12 +345,16 @@ cmd_rollback() {
             echo "No backups found."
             return
         fi
-        echo "Available backups:"
+        echo "Available backups (1 = newest):"
         for label_dir in "$BACKUP_ROOT"/*/; do
             local label
             label="$(basename "$label_dir")"
-            for snap in "$label_dir"*/; do
-                [[ -d "$snap" ]] && echo "  $label  $(basename "$snap")"
+            local snaps=()
+            while IFS= read -r s; do snaps+=("$s"); done < <(find "$label_dir" -mindepth 1 -maxdepth 1 -type d | sort -r)
+            local idx=1
+            for snap in "${snaps[@]}"; do
+                echo "  [$idx] $label  $(basename "$snap")"
+                ((idx++))
             done
         done
         return
@@ -370,13 +375,25 @@ cmd_rollback() {
         timestamp="$(basename "$snap")"
     else
         label="$subcmd"
-        timestamp="${1:-}"
-        if [[ -z "$timestamp" ]]; then
+        local arg="${1:-}"
+        if [[ -z "$arg" ]]; then
+            # No argument: pick newest
             snap="$(find "$BACKUP_ROOT/$label" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort | tail -1)"
             if [[ -z "$snap" ]]; then
                 echo "No backups found for label '$label'." >&2; exit 1
             fi
             timestamp="$(basename "$snap")"
+        elif [[ "$arg" =~ ^[0-9]+$ && ${#arg} -le 4 ]]; then
+            # Numeric index: 1 = newest, 2 = second newest, …
+            local nth="$arg"
+            snap="$(find "$BACKUP_ROOT/$label" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -r | sed -n "${nth}p")"
+            if [[ -z "$snap" ]]; then
+                echo "No snapshot #$nth found for label '$label'." >&2; exit 1
+            fi
+            timestamp="$(basename "$snap")"
+        else
+            # Explicit timestamp
+            timestamp="$arg"
         fi
         snap="$BACKUP_ROOT/$label/$timestamp"
         if [[ ! -d "$snap" ]]; then
@@ -468,9 +485,11 @@ macOS commands:
 
 Rollback:
   rollback               Restore the most recent backup
-  rollback list          List all available backups
+  rollback               Restore the most recent backup
+  rollback list          List all available backups (with index numbers)
   rollback <label>       Restore latest backup for <label>
-  rollback <label> <ts>  Restore specific snapshot
+  rollback <label> <N>   Restore Nth newest (1=latest, 2=one before, …)
+  rollback <label> <ts>  Restore specific snapshot by timestamp
 
   Labels: collect, apply, mac-collect, mac-apply
 EOF

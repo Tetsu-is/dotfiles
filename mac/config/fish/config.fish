@@ -14,18 +14,21 @@ if status is-interactive
     fish_add_path ~/.local/bin
 
     # Google Cloud SDK
-    source ~/google-cloud-sdk/path.fish.inc
+    if test -f ~/google-cloud-sdk/path.fish.inc
+        source ~/google-cloud-sdk/path.fish.inc
+    end
 
     # Starship prompt
+    set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
     starship init fish | source
 
     # Git abbreviations
-    abbr -a ga   'git add'
-    abbr -a gcm  'git commit -m'
-    abbr -a gps  'git push'
-    abbr -a gpl  'git pull'
-    abbr -a gsw  'git switch'
+    abbr -a ga 'git add'
+    abbr -a gcm 'git commit -m'
+    abbr -a gps 'git push'
+    abbr -a gpl 'git pull'
+    abbr -a gsw 'git switch'
     abbr -a gswc 'git switch -c'
-    abbr -a gwt  'git worktree'
+    abbr -a gwt 'git worktree'
 
 end
