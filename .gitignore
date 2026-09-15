@@ -19,6 +19,7 @@ config/nvim/shada/
 __pycache__/
 *.o
 *.so
+mac/config/sketchybar/helper/helper
 
 # OS noise
 .DS_Store

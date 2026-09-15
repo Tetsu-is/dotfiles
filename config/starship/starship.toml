@@ -25,7 +25,7 @@ background = "#0C1014"
 current = "#1A2333"
 foreground = "#D4E8F0"
 comment = "#4F6B7C"
-primary = "#00ADD8"
+primary = "#bd93f9"
 cyan = "#00A29C"
 green = "#4ECA8B"
 orange = "#F0A347"
@@ -54,27 +54,27 @@ format = '[[($all_status$ahead_behind )](fg:primary bg:#394260)]($style)'
 [nodejs]
 symbol = ""
 style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+format = '[[ $symbol ($version) ](fg:#bd93f9 bg:#212736)]($style)'
 
 [rust]
 symbol = ""
 style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+format = '[[ $symbol ($version) ](fg:#bd93f9 bg:#212736)]($style)'
 
 [golang]
 symbol = ""
 style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+format = '[[ $symbol ($version) ](fg:#bd93f9 bg:#212736)]($style)'
 
 [php]
 symbol = ""
 style = "bg:#212736"
-format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+format = '[[ $symbol ($version) ](fg:#bd93f9 bg:#212736)]($style)'
 
 [python]
 symbol = " "
 style = "bg:#212736"
-format = '[[ $symbol ($version)(\($virtualenv\)) ](fg:#769ff0 bg:#212736)]($style)'
+format = '[[ $symbol ($version)(\($virtualenv\)) ](fg:#bd93f9 bg:#212736)]($style)'
 
 [time]
 disabled = false
